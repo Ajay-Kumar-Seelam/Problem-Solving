@@ -1,19 +1,32 @@
 class Solution:
     def divisorGame(self, n: int) -> bool:
-        memo = [-1] * (n+1)  # Initialize memoization array
+        # Dictionary for memoization
+        memo = {}
 
-        def fun(n: int):
-            if n == 1:
-                return False
-            if memo[n] != -1:
+        def fun(n: int, t: int):
+            # Check if the result is already computed
+            if n in memo:
                 return memo[n]
 
+            if n < 1:
+                return False
+            elif n == 1 and t % 2 == 0:
+                return True
+            elif n == 1 and t % 2 != 0:
+                return False
+            
             for i in range(1, n):
-                if n % i == 0 and not fun(n - i):
-                    memo[n] = True
+                if i == 1:
+                    result = fun(n - 1, t + 1)
+                elif i > 1 and n % i == 0:
+                    fact1 = i
+                    fact2 = n // i
+                    result = fun(n - fact1, t + 1) or fun(n - fact2, t + 1)
+                
+                memo[n] = result  # Store the result in the memo dictionary
+                if result:
                     return True
 
-            memo[n] = False
             return False
 
-        return fun(n)
+        return fun(n, 1)
