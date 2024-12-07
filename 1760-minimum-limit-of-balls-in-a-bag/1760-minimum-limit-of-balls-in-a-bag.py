@@ -10,7 +10,7 @@ class Solution:
                     return False
                 
             return True
-        res=0
+        
         l,r=1,max(nums)
         while l<r:
             m=l+((r-l)//2)
