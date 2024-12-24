@@ -6,38 +6,49 @@
 #         self.right = right
 class Solution:
     def minimumOperations(self, root: Optional[TreeNode]) -> int:
-        
-        def count_swaps(nums):
-            swaps=0
+        def count_swap(nums):
+            swap=0
             sorted_nums=sorted(nums)
             
-            ind_map={n:i for i,n in enumerate(nums)}
-            for i in range(len(nums)):
-                if nums[i]!=sorted_nums[i]:
-                    swaps+=1
+            ind={n:i for i,n in enumerate(nums)}
+            
+            for z in range(len(nums)):
+                
+                if sorted_nums[z]!=nums[z]:
+                    temp=ind[sorted_nums[z]]
+                    ind[nums[z]],ind[sorted_nums[z]]=temp,z
+                    nums[temp]=nums[z]
+                    nums[z]=sorted_nums[z]
                     
-                    j=ind_map[sorted_nums[i]]
-                    nums[i],nums[j]=nums[j],nums[i]
-                    ind_map[nums[j]]=j
+                    swap+=1
+            return swap
                     
-            return swaps
-        dq=deque([root])
+            
         res=0
-        while dq:
+        
+        
+        q=deque([root])
+        while q:
+            
             level=[]
-            for _ in range(len(dq)):
-                
-                temp=dq.popleft()
-                level.append(temp.val)
-                
-                if temp.left:
-                    dq.append(temp.left)
-                if temp.right:
-                    dq.append(temp.right)
             
-            res+=count_swaps(level)
-            
+            for _ in range(len(q)):
+                node=q.popleft()
+                level.append(node.val)
+                print(node.val,end=" ")
+                
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+                    
+            # q=level
+            res+=count_swap(level)
         return res
+            
+        
+        
+        
             
             
         
